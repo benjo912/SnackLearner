@@ -28,4 +28,10 @@
         android:id="@+id.adminUserListFragment"
         android:name="com.example.snacklearner.AdminUserListFragment"
         android:label="Korisnici" />
+    <fragment
+        android:id="@+id/addRecipeFragment"
+        android:name="com.example.snacklearner.AddRecipeFragment"
+        android:label="Dodaj recept"
+        tools:layout="@layout/fragment_add_recipe" />
+
 </navigation>

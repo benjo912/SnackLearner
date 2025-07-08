@@ -1,64 +1,48 @@
 package com.example.snacklearner
 
-import android.content.Context
 import android.os.Bundle
-import android.widget.Button
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.example.snacklearner.data.AppDatabase
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class RecipeDetailsActivity : AppCompatActivity() {
 
-    private var isAdmin: Boolean = false
+    private lateinit var recipeTitleTextView: TextView
+    private lateinit var recipeDescriptionTextView: TextView
+    private lateinit var recipeAuthorTextView: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_recipe_details)
 
-        val title = intent.getStringExtra("recipe_title") ?: ""
-        val description = intent.getStringExtra("recipe_description") ?: ""
-        val ingredients = intent.getStringExtra("recipe_ingredients") ?: ""
+        recipeTitleTextView = findViewById(R.id.recipeTitleTextView)
+        recipeDescriptionTextView = findViewById(R.id.recipeDescriptionTextView)
+        recipeAuthorTextView = findViewById(R.id.recipeAuthorTextView)
 
-        val titleTextView: TextView = findViewById(R.id.titleTextView)
-        val descriptionTextView: TextView = findViewById(R.id.descriptionTextView)
-        val ingredientsTextView: TextView = findViewById(R.id.ingredientsTextView)
-        val saveButton: Button = findViewById(R.id.saveFavoriteButton)
-        val deleteButton: Button = findViewById(R.id.deleteButton)
-        val likesTextView: TextView = findViewById(R.id.likesTextView)
-        val dislikesTextView: TextView = findViewById(R.id.dislikesTextView)
-        val author = intent.getStringExtra("recipe_author")
-        val authorTextView = findViewById<TextView>(R.id.textViewAuthor)
-        authorTextView.text = "Autor: $author"
+        val recipeId = intent.getIntExtra("recipe_id", -1)
 
-        titleTextView.text = title
-        descriptionTextView.text = description
-        ingredientsTextView.text = ingredients
-
-        isAdmin = intent.getBooleanExtra("isAdmin", false)
-
-        val sharedPref = getSharedPreferences("votes", Context.MODE_PRIVATE)
-        val likes = sharedPref.getInt("$title-likes", 0)
-        val dislikes = sharedPref.getInt("$title-dislikes", 0)
-
-        likesTextView.text = "Lajkovi: $likes"
-        dislikesTextView.text = "Dislajkovi: $dislikes"
-
-        saveButton.setOnClickListener {
-            val pref = getSharedPreferences("favorites", Context.MODE_PRIVATE).edit()
-            pref.putString(title, "$description||$ingredients")
-            pref.apply()
-            Toast.makeText(this, "Recept spremljen u favorite", Toast.LENGTH_SHORT).show()
+        if (recipeId != -1) {
+            loadRecipe(recipeId)
         }
+    }
 
-        if (isAdmin) {
-            deleteButton.visibility = Button.VISIBLE
-            deleteButton.setOnClickListener {
+    private fun loadRecipe(recipeId: Int) {
+        CoroutineScope(Dispatchers.IO).launch {
+            val db = AppDatabase.getDatabase(this@RecipeDetailsActivity)
+            val recipe = db.recipeDao().getRecipeById(recipeId)
 
-                Toast.makeText(this, "Recept obrisan", Toast.LENGTH_SHORT).show()
-                finish()
+            recipe?.let {
+                val author = db.userDao().getUserById(it.userId)
+
+                runOnUiThread {
+                    recipeTitleTextView.text = it.title
+                    recipeDescriptionTextView.text = it.description
+                    recipeAuthorTextView.text = "Autor: ${author?.username ?: "Nepoznat"}"
+                }
             }
-        } else {
-            deleteButton.visibility = Button.GONE
         }
     }
 }

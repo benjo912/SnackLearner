@@ -43,6 +43,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             val menu = binding.navigationView.menu
             val manageUsersItem = menu.findItem(R.id.nav_manage_users)
             manageUsersItem?.isVisible = isAdmin
+
+            binding.fab.setOnClickListener {
+                navController.navigate(R.id.addRecipeFragment)
+            }
         }
 
         binding.toolbar.setNavigationIcon(R.drawable.ic_menu_hamburger)

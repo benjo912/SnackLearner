@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/loginFragment">
+
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="com.example.snacklearner.LoginFragment"
+        android:label="Login" />
+
+    <fragment
+        android:id="@+id/registerFragment"
+        android:name="com.example.snacklearner.RegisterFragment"
+        android:label="Register" />
+
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.example.snacklearner.SettingsFragment"
+        android:label="Settings" />
+
+    <fragment
+        android:id="@+id/editProfileFragment"
+        android:name="com.example.snacklearner.EditProfileFragment"
+        android:label="Edit Profile" />
+
+    <fragment
+        android:id="@+id.adminUserListFragment"
+        android:name="com.example.snacklearner.AdminUserListFragment"
+        android:label="Korisnici" />
+</navigation>

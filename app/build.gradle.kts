@@ -39,6 +39,7 @@ android {
 
     buildFeatures {
         compose = true
+        viewBinding = true
     }
 
     composeOptions {
@@ -80,5 +81,8 @@ dependencies {
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.lifecycle.runtime.ktx)
+    implementation(libs.navigation.fragment)
+    implementation(libs.navigation.ui)
+
 }
 

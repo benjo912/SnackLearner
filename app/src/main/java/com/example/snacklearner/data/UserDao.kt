@@ -12,7 +12,13 @@ interface UserDao {
 
     @Update
     suspend fun updateUser(user: UserEntity)
-    @Query("SELECT * FROM users ORDER BY id DESC LIMIT 1")
-    fun getLastLoggedInUser(): UserEntity?
 
+    @Delete
+    suspend fun deleteUser(user: UserEntity)
+
+    @Query("SELECT * FROM users")
+    suspend fun getAllUsers(): List<UserEntity>
+
+    @Query("SELECT * FROM users ORDER BY username DESC LIMIT 1")
+    fun getLastLoggedInUser(): UserEntity?
 }

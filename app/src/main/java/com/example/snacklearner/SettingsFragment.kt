@@ -1,55 +1,55 @@
 package com.example.snacklearner
 
-import android.graphics.Color
+import android.content.Context
 import android.os.Bundle
-import android.view.View
-import android.widget.Toast
-import androidx.navigation.fragment.findNavController
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
+import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.example.snacklearner.data.AppDatabase
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class SettingsFragment : PreferenceFragmentCompat() {
 
-    private var currentUsername: String? = null
-
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.settings, rootKey)
 
-        val logoutPref = findPreference<Preference>("logout")
-        logoutPref?.setOnPreferenceClickListener {
-            Toast.makeText(requireContext(), "Odjavljeni ste", Toast.LENGTH_SHORT).show()
-            parentFragmentManager.beginTransaction()
-                .replace(R.id.fragmentContainer, LoginFragment())
-                .commit()
-            true
-        }
+        val sharedPreferences = requireContext().getSharedPreferences("session", Context.MODE_PRIVATE)
+        val userId = sharedPreferences.getInt("user_id", -1)
 
         val editProfilePref = findPreference<Preference>("edit_profile")
-        editProfilePref?.setOnPreferenceClickListener {
-            currentUsername?.let { username ->
-                val bundle = Bundle().apply {
-                    putString("username", username)
+        val logoutPref = findPreference<Preference>("logout")
+        val manageUsersPref = findPreference<Preference>("manage_users")
+        val userInfoPref = findPreference<Preference>("user_info")
+
+        lifecycleScope.launch {
+            val db = AppDatabase.getDatabase(requireContext())
+            val user = db.userDao().getUserById(userId)
+
+            if (user != null) {
+                userInfoPref?.summary = user.username
+
+                if (user.isAdmin) {
+                    manageUsersPref?.isVisible = true
+                    manageUsersPref?.setOnPreferenceClickListener {
+                        findNavController().navigate(R.id.adminUserListFragment)
+                        true
+                    }
+                } else {
+                    manageUsersPref?.isVisible = false
                 }
-                findNavController().navigate(R.id.action_settingsFragment_to_editProfileFragment, bundle)
             }
+        }
+
+        editProfilePref?.setOnPreferenceClickListener {
+            findNavController().navigate(R.id.editProfileFragment)
             true
         }
-    }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        view.setBackgroundColor(Color.parseColor("#F5F5DC"))
-
-
-        CoroutineScope(Dispatchers.IO).launch {
-            val db = AppDatabase.getDatabase(requireContext())
-            val user = db.userDao().getLastLoggedInUser()
-            currentUsername = user?.username
+        logoutPref?.setOnPreferenceClickListener {
+            sharedPreferences.edit().clear().apply()
+            findNavController().navigate(R.id.loginFragment)
+            true
         }
     }
 }
-

@@ -2,53 +2,82 @@ package com.example.snacklearner
 
 import android.os.Bundle
 import android.view.MenuItem
-import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
-import androidx.fragment.app.commit
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.NavigationUI
+import androidx.navigation.ui.setupWithNavController
+import com.example.snacklearner.data.AppDatabase
+import com.example.snacklearner.data.UserEntity
 import com.example.snacklearner.databinding.ActivityMainBinding
 import com.google.android.material.navigation.NavigationView
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
     private lateinit var binding: ActivityMainBinding
-    private var isAdmin: Boolean = false
+    private var currentUser: UserEntity? = null
+    private var isAdmin = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         setSupportActionBar(binding.toolbar)
-        supportActionBar?.setDisplayShowTitleEnabled(true)
+
+        val navHostFragment = supportFragmentManager
+            .findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+        val navController = navHostFragment.navController
+
+        binding.navigationView.setupWithNavController(navController)
+
+        CoroutineScope(Dispatchers.Main).launch {
+            val db = AppDatabase.getDatabase(this@MainActivity)
+            currentUser = db.userDao().getLastLoggedInUser()
+            isAdmin = currentUser?.isAdmin == true
+
+            val menu = binding.navigationView.menu
+            val manageUsersItem = menu.findItem(R.id.nav_manage_users)
+            manageUsersItem?.isVisible = isAdmin
+        }
+
+        binding.toolbar.setNavigationIcon(R.drawable.ic_menu_hamburger)
+        binding.toolbar.setNavigationOnClickListener {
+            binding.drawerLayout.openDrawer(GravityCompat.START)
+        }
 
         binding.navigationView.setNavigationItemSelectedListener(this)
-
-        isAdmin = intent.getBooleanExtra("isAdmin", false)
-
-        if (isAdmin) {
-            binding.fab.visibility = View.VISIBLE
-        } else {
-            binding.fab.visibility = View.GONE
-        }
-
-        binding.fab.setOnClickListener {
-            Toast.makeText(this, "Dodavanje novog recepta", Toast.LENGTH_SHORT).show()
-            // Ovdje otvori AddRecipeFragment
-        }
-
-        supportFragmentManager.commit {
-            replace(R.id.fragmentContainer, SearchFragment())
-        }
     }
 
-    fun getToolbar() = binding.toolbar
-    fun getDrawerLayout() = binding.drawerLayout
-
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
-        binding.drawerLayout.closeDrawer(GravityCompat.START)
-        return true
+        val navHostFragment =
+            supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+        val navController = navHostFragment.navController
+
+        return when (item.itemId) {
+            R.id.nav_all_recipes -> {
+                navController.navigate(R.id.searchFragment)
+                true
+            }
+            R.id.nav_settings -> {
+                navController.navigate(R.id.settingsFragment)
+                true
+            }
+            R.id.nav_manage_users -> {
+                if (isAdmin) {
+                    navController.navigate(R.id.adminUserListFragment)
+                } else {
+                    Toast.makeText(this, "Nemate dozvolu za pristup korisnicima.", Toast.LENGTH_SHORT).show()
+                }
+                true
+            }
+            else -> false
+        }.also {
+            binding.drawerLayout.closeDrawer(GravityCompat.START)
+        }
     }
 }

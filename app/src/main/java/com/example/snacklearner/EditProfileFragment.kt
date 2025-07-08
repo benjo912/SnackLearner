@@ -1,4 +1,4 @@
-package com.example.snacklearner.util
+package com.example.snacklearner
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,7 +10,6 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import com.example.snacklearner.R
 import com.example.snacklearner.data.AppDatabase
 import com.example.snacklearner.data.UserEntity
 import kotlinx.coroutines.Dispatchers

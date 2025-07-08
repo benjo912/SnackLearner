@@ -17,6 +17,12 @@
             android:key="logout"
             android:title="Odjava"
             android:summary="Odjavite se iz aplikacije" />
+
+        <Preference
+            android:key="manage_users"
+            android:title="Upravljanje korisnicima"
+            android:summary="Pogledaj i obriši korisnike"
+            android:visible="false" />
     </PreferenceCategory>
 
     <PreferenceCategory android:title="O aplikaciji">
@@ -28,3 +34,4 @@
     </PreferenceCategory>
 
 </androidx.preference.PreferenceScreen>
+

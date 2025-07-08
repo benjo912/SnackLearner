@@ -1,62 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp"
-    android:background="#F5F5DC">
+    android:orientation="vertical"
+    android:padding="16dp">
 
-    <LinearLayout
-        android:orientation="vertical"
+    <TextView
+        android:id="@+id/titleTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_horizontal">
+        android:text="Naslov recepta"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="8dp" />
 
-        <ImageView
-            android:id="@+id/logoImageView"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="24dp"
-            android:src="@drawable/logo"
-            android:contentDescription="Logo aplikacije" />
+    <TextView
+        android:id="@+id/descriptionTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Opis recepta"
+        android:textSize="16sp"
+        android:layout_marginBottom="8dp" />
 
-        <TextView
-            android:id="@+id/titleTextView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textStyle="bold"
-            android:textSize="24sp"
-            android:textColor="#000000"
-            android:text="Naslov recepta"
-            android:layout_marginBottom="8dp" />
+    <TextView
+        android:id="@+id/ingredientsTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Sastojci"
+        android:textSize="16sp"
+        android:layout_marginBottom="16dp" />
 
-        <TextView
-            android:id="@+id/descriptionTextView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="18sp"
-            android:textColor="#000000"
-            android:text="Opis recepta"
-            android:layout_marginBottom="12dp" />
+    <TextView
+        android:id="@+id/likesTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Lajkovi: 0"
+        android:textSize="16sp"
+        android:layout_marginBottom="4dp" />
 
-        <TextView
-            android:id="@+id/ingredientsTextView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="16sp"
-            android:textColor="#555555"
-            android:text="Sastojci recepta" />
+    <TextView
+        android:id="@+id/dislikesTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Dislajkovi: 0"
+        android:textSize="16sp"
+        android:layout_marginBottom="16dp" />
 
-        <Button
-            android:id="@+id/saveFavoriteButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Spremi u favorite"
-            android:layout_marginTop="24dp"
-            android:backgroundTint="#008577"
-            android:textColor="#FFFFFF" />
+    <Button
+        android:id="@+id/saveFavoriteButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Spremi u favorite"
+        android:layout_marginBottom="8dp" />
 
+    <Button
+        android:id="@+id/deleteButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Obriši recept"
+        android:visibility="gone"
+        android:backgroundTint="#FF4444"
+        android:textColor="#FFFFFF" />
 
-    </LinearLayout>
-
-</ScrollView>
+</LinearLayout>

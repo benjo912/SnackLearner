@@ -17,6 +17,9 @@ interface RecipeDao {
     @Query("UPDATE recipes SET dislikes = dislikes + 1 WHERE id = :id")
     suspend fun dislikeRecipe(id: Int)
 
+    @Query("SELECT * FROM recipes WHERE createdBy = :username")
+    suspend fun getRecipesByUser(username: String): List<RecipeEntity>
+
     @Delete
     suspend fun deleteRecipe(recipe: RecipeEntity)
 }

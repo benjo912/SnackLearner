@@ -1,59 +1,71 @@
 package com.example.snacklearner
 
+import android.content.Intent
 import android.os.Bundle
-import android.view.*
-import android.widget.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.Button
+import android.widget.EditText
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.example.snacklearner.data.AppDatabase
-import com.example.snacklearner.data.UserEntity
 import kotlinx.coroutines.launch
 
 class LoginFragment : Fragment() {
 
-    private lateinit var db: AppDatabase
+    private lateinit var usernameEditText: EditText
+    private lateinit var passwordEditText: EditText
+    private lateinit var loginButton: Button
+    private lateinit var registerButton: Button
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         return inflater.inflate(R.layout.fragment_login, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val activity = requireActivity() as MainActivity
-        db = (activity.application as SnackLearnerApp).database
-
-        val usernameEditText = view.findViewById<EditText>(R.id.usernameEditText)
-        val passwordEditText = view.findViewById<EditText>(R.id.passwordEditText)
-        val loginButton = view.findViewById<Button>(R.id.loginButton)
+        usernameEditText = view.findViewById(R.id.editTextUsername)
+        passwordEditText = view.findViewById(R.id.editTextPassword)
+        loginButton = view.findViewById(R.id.buttonLogin)
+        registerButton = view.findViewById(R.id.buttonRegister)
 
         loginButton.setOnClickListener {
             val username = usernameEditText.text.toString().trim()
             val password = passwordEditText.text.toString().trim()
 
+            if (username.isEmpty() || password.isEmpty()) {
+                Toast.makeText(context, "Unesite korisničko ime i lozinku", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
             lifecycleScope.launch {
-                val user = db.userDao().getUserByUsername(username)
+                val db = AppDatabase.getDatabase(requireContext())
+                val user = db.userDao().login(username, password)
 
-                if (user != null && user.password == password) {
-                    Toast.makeText(requireContext(), "Dobrodošao ${user.role}", Toast.LENGTH_SHORT).show()
-                    activity.getToolbar().visibility = View.VISIBLE
-                    activity.getDrawerLayout().setDrawerLockMode(androidx.drawerlayout.widget.DrawerLayout.LOCK_MODE_UNLOCKED)
-
-                    val bundle = Bundle().apply { putString("role", user.role) }
-                    val searchFragment = SearchFragment()
-                    searchFragment.arguments = bundle
-
-                    parentFragmentManager.beginTransaction()
-                        .replace(R.id.fragmentContainer, searchFragment)
-                        .commit()
-                } else if (user == null) {
-                    val newUser = UserEntity(username, password, "user")
-                    db.userDao().insertUser(newUser)
-                    Toast.makeText(requireContext(), "Registracija uspješna", Toast.LENGTH_SHORT).show()
+                if (user != null) {
+                    val intent = Intent(requireContext(), MainActivity::class.java)
+                    intent.putExtra("isAdmin", user.isAdmin)
+                    intent.putExtra("username", user.username)
+                    startActivity(intent)
+                    requireActivity().finish()
                 } else {
-                    Toast.makeText(requireContext(), "Pogrešna lozinka", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, "Pogrešan unos", Toast.LENGTH_SHORT).show()
                 }
             }
+        }
+
+        registerButton.setOnClickListener {
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.fragmentContainer, RegisterFragment())
+                .addToBackStack(null)
+                .commit()
         }
     }
 }

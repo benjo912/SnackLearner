@@ -9,6 +9,11 @@
             android:selectable="false" />
 
         <Preference
+            android:key="edit_profile"
+            android:title="Uredi profil"
+            android:summary="Promijenite korisničke podatke" />
+
+        <Preference
             android:key="logout"
             android:title="Odjava"
             android:summary="Odjavite se iz aplikacije" />

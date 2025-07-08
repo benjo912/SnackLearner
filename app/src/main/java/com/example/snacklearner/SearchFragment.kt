@@ -49,7 +49,7 @@ class SearchFragment : Fragment() {
         lifecycleScope.launch {
             recipeDao.getAll().collectLatest { recipesFromDb ->
                 recipeList = recipesFromDb.map {
-                    Recipe(it.title, it.description, it.ingredients ?: "")
+                    Recipe(it.title, it.description, it.ingredients)
                 }
                 recipeAdapter.recipes = recipeList
                 recipeAdapter.notifyDataSetChanged()
@@ -61,9 +61,8 @@ class SearchFragment : Fragment() {
             true
         }
 
-        val activity = requireActivity() as MainActivity
-        val toolbar = activity.getToolbar()
-        val drawerLayout = activity.getDrawerLayout()
+        val toolbar = requireActivity().findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar)
+        val drawerLayout = requireActivity().findViewById<androidx.drawerlayout.widget.DrawerLayout>(R.id.drawerLayout)
 
         toolbar.setNavigationIcon(R.drawable.ic_menu_hamburger)
         toolbar.setNavigationOnClickListener {

@@ -1,5 +1,7 @@
 package com.example.snacklearner
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,9 +11,8 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.fragment.findNavController
 import com.example.snacklearner.data.AppDatabase
-import com.example.snacklearner.model.User
+import com.example.snacklearner.data.UserEntity
 import kotlinx.coroutines.launch
 
 class RegisterFragment : Fragment() {
@@ -54,10 +55,26 @@ class RegisterFragment : Fragment() {
                 if (existingUser != null) {
                     Toast.makeText(context, "Korisnik već postoji", Toast.LENGTH_SHORT).show()
                 } else {
-                    val newUser = User(username, password, fullName, email, isAdmin = false)
-                    userDao.insert(newUser)
-                    Toast.makeText(context, "Registracija uspješna!", Toast.LENGTH_SHORT).show()
-                    findNavController().popBackStack()
+                    val newUser = UserEntity(
+                        username = username,
+                        password = password,
+                        fullName = fullName,
+                        email = email,
+                        isAdmin = false
+                    )
+
+                    val insertedId = userDao.insertUser(newUser)
+
+                    val sharedPref = requireActivity().getSharedPreferences("UserPrefs", Context.MODE_PRIVATE)
+                    sharedPref.edit()
+                        .putInt("user_id", insertedId.toInt())
+                        .putString("username", newUser.username)
+                        .putBoolean("isAdmin", newUser.isAdmin)
+                        .apply()
+
+                    val intent = Intent(requireContext(), MainActivity::class.java)
+                    startActivity(intent)
+                    requireActivity().finish()
                 }
             }
         }

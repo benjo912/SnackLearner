@@ -10,6 +10,7 @@ data class RecipeEntity(
     val description: String,
     val ingredients: String,
     val createdBy: String,
+    val userId: Int,
     val likes: Int = 0,
     val dislikes: Int = 0
 )

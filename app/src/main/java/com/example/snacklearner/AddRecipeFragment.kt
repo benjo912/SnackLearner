@@ -42,9 +42,10 @@ class AddRecipeFragment : Fragment() {
                         title = title,
                         description = description,
                         ingredients = ingredients,
+                        createdBy = userId.toString(),
                         userId = userId
                     )
-                    db.recipeDao().insertRecipe(recipe)
+                    db.recipeDao().insert(recipe)
                     Toast.makeText(context, "Recept spremljen", Toast.LENGTH_SHORT).show()
                     findNavController().navigateUp()
                 }

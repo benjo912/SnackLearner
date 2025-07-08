@@ -7,6 +7,10 @@ import kotlinx.coroutines.flow.Flow
 interface RecipeDao {
     @Query("SELECT * FROM recipes")
     fun getAll(): Flow<List<RecipeEntity>>
+    @Query("SELECT * FROM recipes WHERE userId = :userId")
+    suspend fun getRecipesByUserId(userId: Int): List<RecipeEntity>
+    @Query("SELECT * FROM recipes WHERE id = :id")
+    suspend fun getRecipeById(id: Int): RecipeEntity?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(recipe: RecipeEntity)

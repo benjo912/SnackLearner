@@ -1,65 +1,93 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="16dp">
+    android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/titleTextView"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Naslov recepta"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        android:layout_marginBottom="8dp" />
+        android:orientation="vertical"
+        android:padding="16dp">
 
-    <TextView
-        android:id="@+id/descriptionTextView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Opis recepta"
-        android:textSize="16sp"
-        android:layout_marginBottom="8dp" />
+        <TextView
+            android:id="@+id/titleTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Naslov recepta"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="8dp" />
 
-    <TextView
-        android:id="@+id/ingredientsTextView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Sastojci"
-        android:textSize="16sp"
-        android:layout_marginBottom="16dp" />
+        <TextView
+            android:id="@+id/descriptionTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Opis recepta"
+            android:textSize="16sp"
+            android:layout_marginBottom="8dp" />
 
-    <TextView
-        android:id="@+id/likesTextView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Lajkovi: 0"
-        android:textSize="16sp"
-        android:layout_marginBottom="4dp" />
+        <TextView
+            android:id="@+id/recipeAuthorTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Autor: Nepoznat"
+            android:textSize="16sp"
+            android:layout_marginBottom="16dp" />
 
-    <TextView
-        android:id="@+id/dislikesTextView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Dislajkovi: 0"
-        android:textSize="16sp"
-        android:layout_marginBottom="16dp" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="16dp">
 
-    <Button
-        android:id="@+id/saveFavoriteButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Spremi u favorite"
-        android:layout_marginBottom="8dp" />
+            <Button
+                android:id="@+id/likeButton"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="👍 Like" />
 
-    <Button
-        android:id="@+id/deleteButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Obriši recept"
-        android:visibility="gone"
-        android:backgroundTint="#FF4444"
-        android:textColor="#FFFFFF" />
+            <TextView
+                android:id="@+id/likesTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0"
+                android:paddingStart="8dp"
+                android:paddingEnd="16dp"
+                android:textSize="16sp" />
 
-</LinearLayout>
+            <Button
+                android:id="@+id/dislikeButton"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="👎 Dislike" />
+
+            <TextView
+                android:id="@+id/dislikesTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0"
+                android:paddingStart="8dp"
+                android:textSize="16sp" />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/saveFavoriteButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Spremi u favorite"
+            android:layout_marginBottom="8dp" />
+
+        <Button
+            android:id="@+id/deleteButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Obriši recept"
+            android:visibility="gone"
+            android:backgroundTint="#FF4444"
+            android:textColor="#FFFFFF" />
+    </LinearLayout>
+</ScrollView>
+

@@ -6,29 +6,33 @@
     android:layout_height="match_parent">
 
     <EditText
-        android:id="@+id/usernameEditText"
+        android:id="@+id/editTextUsername"
         android:hint="Korisničko ime"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName" />
 
     <EditText
-        android:id="@+id/passwordEditText"
+        android:id="@+id/editTextPassword"
         android:hint="Lozinka"
         android:inputType="textPassword"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp" />
 
     <Button
-        android:id="@+id/loginButton"
+        android:id="@+id/buttonLogin"
         android:text="Prijavi se"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"/>
+        android:layout_marginTop="16dp" />
 
     <Button
-        android:id="@+id/goToRegisterButton"
+        android:id="@+id/buttonRegister"
         android:text="Registriraj se"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"/>
+        android:layout_marginTop="8dp" />
+
 </LinearLayout>
+

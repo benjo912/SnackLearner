@@ -1,5 +1,6 @@
 package com.example.snacklearner
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -50,9 +51,14 @@ class LoginFragment : Fragment() {
                 val user = db.userDao().login(username, password)
 
                 if (user != null) {
+                    val sharedPref = requireActivity().getSharedPreferences("UserPrefs", Context.MODE_PRIVATE)
+                    sharedPref.edit()
+                        .putInt("user_id", user.id)
+                        .putString("username", user.username)
+                        .putBoolean("isAdmin", user.isAdmin)
+                        .apply()
+
                     val intent = Intent(requireContext(), MainActivity::class.java)
-                    intent.putExtra("isAdmin", user.isAdmin)
-                    intent.putExtra("username", user.username)
                     startActivity(intent)
                     requireActivity().finish()
                 } else {
@@ -63,7 +69,7 @@ class LoginFragment : Fragment() {
 
         registerButton.setOnClickListener {
             parentFragmentManager.beginTransaction()
-                .replace(R.id.fragmentContainer, RegisterFragment())
+                .replace(R.id.nav_host_fragment, RegisterFragment())
                 .addToBackStack(null)
                 .commit()
         }

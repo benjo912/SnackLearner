@@ -66,21 +66,23 @@ class EditProfileFragment : Fragment() {
             val password = passwordEditText.text.toString()
 
             if (currentUser != null) {
-                currentUser!!.apply {
-                    this.fullName = fullName
-                    this.email = email
-                    this.password = password
-                }
+                val updatedUser = currentUser!!.copy(
+                    fullName = fullName,
+                    email = email,
+                    password = password
+                )
 
                 lifecycleScope.launch {
                     val db = AppDatabase.getDatabase(requireContext())
-                    db.userDao().updateUser(currentUser!!)
+                    db.userDao().updateUser(updatedUser)
                     withContext(Dispatchers.Main) {
                         Toast.makeText(requireContext(), "Podaci su spremljeni", Toast.LENGTH_SHORT).show()
                         findNavController().popBackStack()
                     }
                 }
             }
+
+        }
         }
     }
-}
+

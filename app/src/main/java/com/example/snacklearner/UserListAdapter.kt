@@ -1,37 +1,42 @@
 package com.example.snacklearner
 
-import android.content.Context
-import android.os.Bundle
-import androidx.core.os.bundleOf
-import androidx.navigation.fragment.findNavController
-import androidx.preference.Preference
-import androidx.preference.PreferenceFragmentCompat
-import com.google.android.material.navigation.NavigationView
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.ImageButton
+import android.widget.TextView
+import androidx.recyclerview.widget.RecyclerView
+import com.example.snacklearner.data.UserEntity
 
-class SettingsFragment : PreferenceFragmentCompat() {
+class UserListAdapter(
+    private var users: List<UserEntity>,
+    private val onDeleteClick: (UserEntity) -> Unit
+) : RecyclerView.Adapter<UserListAdapter.UserViewHolder>() {
 
-    override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
-        setPreferencesFromResource(R.xml.settings, rootKey)
+    inner class UserViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        val usernameTextView: TextView = view.findViewById(R.id.textUsername)
+        val deleteButton: ImageButton = view.findViewById(R.id.buttonDelete)
+    }
 
-        val sharedPref = requireActivity().getSharedPreferences("user_session", Context.MODE_PRIVATE)
-        val username = sharedPref.getString("username", null) ?: "Nepoznat korisnik"
-        val isAdmin = sharedPref.getBoolean("is_admin", false)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserViewHolder {
+        val view = LayoutInflater.from(parent.context)
+            .inflate(R.layout.user_list_item, parent, false)
+        return UserViewHolder(view)
+    }
 
-        findPreference<Preference>("user_info")?.summary = username
+    override fun onBindViewHolder(holder: UserViewHolder, position: Int) {
+        val user = users[position]
+        holder.usernameTextView.text = user.username
 
-        findPreference<Preference>("edit_profile")?.setOnPreferenceClickListener {
-            val bundle = bundleOf("username" to username)
-            findNavController().navigate(R.id.action_settingsFragment_to_editProfileFragment, bundle)
-            true
+        holder.deleteButton.setOnClickListener {
+            onDeleteClick(user)
         }
+    }
 
-        findPreference<Preference>("logout")?.setOnPreferenceClickListener {
-            sharedPref.edit().clear().apply()
-            findNavController().navigate(R.id.action_settingsFragment_to_loginFragment)
-            true
-        }
+    override fun getItemCount(): Int = users.size
 
-        val navView = requireActivity().findViewById<NavigationView>(R.id.navigationView)
-        navView.menu.findItem(R.id.nav_manage_users)?.isVisible = isAdmin
+    fun updateUsers(newUsers: List<UserEntity>) {
+        users = newUsers
+        notifyDataSetChanged()
     }
 }

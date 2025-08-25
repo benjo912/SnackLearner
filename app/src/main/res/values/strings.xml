@@ -2,4 +2,6 @@
     <string name="app_name">SnackLearner</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="recipe_author">Autor: %1$s</string>
+
 </resources>

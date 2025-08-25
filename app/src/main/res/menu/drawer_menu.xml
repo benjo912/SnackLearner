@@ -30,6 +30,11 @@
             android:icon="@drawable/ic_add"
             android:title="Dodaj recept" />
 
+        <item
+            android:id="@+id/nav_surprise_me"
+            android:icon="@drawable/ic_suprise"
+        android:title="Iznenadi me!" />
+
     </group>
 
 </menu>

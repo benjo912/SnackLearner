@@ -25,4 +25,7 @@ interface RecipeDao {
     @Query("SELECT * FROM recipes")
     fun getAll(): kotlinx.coroutines.flow.Flow<List<RecipeEntity>>
 
+    @Query("SELECT * FROM recipes ORDER BY RANDOM() LIMIT 1")
+    suspend fun getRandomRecipe(): RecipeEntity?
+
 }

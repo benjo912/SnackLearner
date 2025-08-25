@@ -14,8 +14,6 @@ import com.google.android.material.navigation.NavigationView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import android.content.Intent
-
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
@@ -29,7 +27,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         setContentView(binding.root)
 
         setSupportActionBar(binding.toolbar)
-
 
         val navHostFragment = supportFragmentManager
             .findFragmentById(R.id.nav_host_fragment) as NavHostFragment
@@ -69,20 +66,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 navController.navigate(R.id.searchFragment)
                 true
             }
-            R.id.nav_surprise_me -> {
-                CoroutineScope(Dispatchers.Main).launch {
-                    val db = AppDatabase.getDatabase(this@MainActivity)
-                    val recipe = db.recipeDao().getRandomRecipe()
-                    if (recipe != null) {
-                        val intent = Intent(this@MainActivity, RecipeDetailsActivity::class.java)
-                        intent.putExtra("recipe_id", recipe.id)
-                        startActivity(intent)
-                    } else {
-                        Toast.makeText(this@MainActivity, "Nema recepata!", Toast.LENGTH_SHORT).show()
-                    }
-                }
-                true
-            }
             R.id.nav_settings -> {
                 navController.navigate(R.id.settingsFragment)
                 true
@@ -96,11 +79,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 true
             }
             else -> false
-
         }.also {
             binding.drawerLayout.closeDrawer(GravityCompat.START)
         }
-
-
     }
 }

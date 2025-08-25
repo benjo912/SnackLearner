@@ -14,3 +14,4 @@ data class RecipeEntity(
     val likes: Int = 0,
     val dislikes: Int = 0
 )
+

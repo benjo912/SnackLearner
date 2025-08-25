@@ -1,4 +1,4 @@
-package com.example.snacklearner
+package com.example.app
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.espresso.Espresso.onView
